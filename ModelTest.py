@@ -1,7 +1,6 @@
 from keras.models import load_model
 import os
 import tensorflow as tf
-import cv2
 import numpy as np
 import tkinter as tk
 from tkinter import Tk
@@ -36,7 +35,8 @@ def show_instructions():
     information_body_label.pack()
 def show_prediction(prediction):
     global classification
-    predictionClass = prediction[0].index(max(prediction[0]))
+    max_prediction_percent = max(prediction[0])
+    predictionClass = prediction[0].index(max_prediction_percent)
     match predictionClass:
         case 0:
             classification.configure(text = "Your image is of a: Borzoi")
@@ -58,6 +58,8 @@ def show_prediction(prediction):
             classification.configure(text = "Your image is of a: Siberian Husky")
         case 9:
             classification.configure(text = "Your image is of a: Poodle")
+        case -1:
+            classification.configure(text = "Your image is not a dog")
 def upload_file():
     file_types = [('Jpg Files', '*jpg'), ('Png files', '*png')]
     filename = filedialog.askopenfilename(filetypes=file_types)
