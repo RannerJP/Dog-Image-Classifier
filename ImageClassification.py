@@ -1,6 +1,4 @@
-#%%
 import numpy as np
-from matplotlib import pyplot as plot
 import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
@@ -63,4 +61,3 @@ for cluster_size in clusters:
                     best_model = model
                     print(f"best model so far with accuracy: {accuracy.result().numpy()}, with clusters of size: {cluster_size}, convolution layers: {layers}, # of Filters {filters}, # of epochs: {steps}")
 best_model.save(os.path.join('models', 'DogClassification.h5'))
-# %%
