@@ -7,7 +7,6 @@ import tkinter as tk
 from tkinter import Tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
-import time
 classifyImage = None
 classification = None
 def show_instructions():
