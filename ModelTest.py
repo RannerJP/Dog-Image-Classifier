@@ -18,7 +18,7 @@ def show_instructions():
     information_header = "Information About the Program:"
     information_body = "This program was trained on a CNN with 2 Conv2D layers and a dense layer. Relu activtion was used for the inbetween layers"\
                         " with softmax being used for the final output layer. Each image had at least 150 images in the database, 70% was for training, 20%"\
-                            " for validiation, and 10% \\for testing. The program classifies 10 dog breeds, those being: Borzoi, Chihuahua, Dingo, German Shepard"\
+                            " for validiation, and 10%\ for testing. The program classifies 10 dog breeds, those being: Borzoi, Chihuahua, Dingo, German Shepard"\
                             ", Golden Retriever, Mexican Hairless, Pug, Shih-Tzu, Siberian Husky, and (Standard) Poodle. 72 models with differing parameters "\
                             "were tested with the best one being saved as an h5 file for use in this program. All images were reformatted to 256x256 "\
                             "and came from Standford Dogs Dataset, but only 10 breeds I believed were distinct enough from each other were used. "
@@ -33,7 +33,9 @@ def show_instructions():
     information_body_label = tk.Label(instructions, text=information_body)
     information_body_label.config(wraplength=300)
     information_body_label.pack()
-def show_prediction(prediction):
+def show_prediction(npImage):
+    prediction = model.predict(np.expand_dims(npImage/255, 0))
+    prediction = prediction.tolist()
     global classification
     max_prediction_percent = max(prediction[0])
     predictionClass = prediction[0].index(max_prediction_percent)
@@ -75,16 +77,13 @@ def upload_file():
     else:
         classifyImage.configure(image = imageView)
         classifyImage.image = imageView
-        resizedImage = tf.image.resize(image, (256,256))
     npImage = np.array(image)
     if classification is None:
         classification = tk.Label(window, text="Classifying... ")
         classification.pack()
     else:
         classification.configure(text = "Classifying... ")
-    prediction = model.predict(np.expand_dims(npImage/255, 0))
-    prediction = prediction.tolist()
-    window.after(3000, show_prediction, prediction)
+    window.after(3000, show_prediction, npImage)
     
 
     
