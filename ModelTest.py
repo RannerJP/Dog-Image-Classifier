@@ -6,8 +6,8 @@ import tkinter as tk
 from tkinter import Tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
-classifyImage = None
-classification = None
+shown_image = None
+classification_text = None
 def show_instructions():
     instructions = tk.Toplevel(window)
     instructions.title("Information")
@@ -33,81 +33,80 @@ def show_instructions():
     information_body_label = tk.Label(instructions, text=information_body)
     information_body_label.config(wraplength=300)
     information_body_label.pack()
-def show_prediction(npImage):
-    prediction = model.predict(np.expand_dims(npImage/255, 0))
+def show_prediction(np_image):
+    prediction = model.predict(np.expand_dims(np_image/255, 0))
     prediction = prediction.tolist()
-    global classification
+    global classification_text
     max_prediction_percent = max(prediction[0])
-    predictionClass = prediction[0].index(max_prediction_percent)
-    match predictionClass:
+    dog_class_predicted = prediction[0].index(max_prediction_percent)
+    match dog_class_predicted:
         case 0:
-            classification.configure(text = "Your image is of a: Borzoi")
+            classification_text.configure(text = "Your image is of a: Borzoi")
         case 1:
-            classification.configure(text = "Your image is of a: Chihuahua")
+            classification_text.configure(text = "Your image is of a: Chihuahua")
         case 2:
-            classification.configure(text = "Your image is of a: Dingo")
+            classification_text.configure(text = "Your image is of a: Dingo")
         case 3:
-            classification.configure(text = "Your image is of a: German Shepard")
+            classification_text.configure(text = "Your image is of a: German Shepard")
         case 4:
-            classification.configure(text = "Your image is of a: Golden Retriever")
+            classification_text.configure(text = "Your image is of a: Golden Retriever")
         case 5:
-            classification.configure(text = "Your image is of a: Mexican Hairless")
+            classification_text.configure(text = "Your image is of a: Mexican Hairless")
         case 6:
-            classification.configure(text = "Your image is of a: Pug")
+            classification_text.configure(text = "Your image is of a: Pug")
         case 7:
-            classification.configure(text = "Your image is of a: Shih-Tzu")
+            classification_text.configure(text = "Your image is of a: Shih-Tzu")
         case 8:
-            classification.configure(text = "Your image is of a: Siberian Husky")
+            classification_text.configure(text = "Your image is of a: Siberian Husky")
         case 9:
-            classification.configure(text = "Your image is of a: Poodle")
+            classification_text.configure(text = "Your image is of a: Poodle")
         case -1:
-            classification.configure(text = "Your image is not a dog")
+            classification_text.configure(text = "Your image is not a dog")
 def upload_file():
     file_types = [('Jpg Files', '*jpg'), ('Png files', '*png')]
     filename = filedialog.askopenfilename(filetypes=file_types)
     image = Image.open(filename)
     image = image.resize((256,256))
-    imageView = ImageTk.PhotoImage(image)
-    global classifyImage
-    global classification
-    if classifyImage is None:
-        classifyImage = tk.Label(window, image=imageView)
-        classifyImage.image = imageView
-        classifyImage.pack()
+    image_view = ImageTk.PhotoImage(image)
+    global shown_image
+    global classification_text
+    if shown_image is None:
+        shown_image = tk.Label(window, image=image_view)
+        shown_image.image = image_view
+        shown_image.pack()
     else:
-        classifyImage.configure(image = imageView)
-        classifyImage.image = imageView
-    npImage = np.array(image)
-    if classification is None:
-        classification = tk.Label(window, text="Classifying... ")
-        classification.pack()
+        shown_image.configure(image = image_view)
+        shown_image.image = image_view
+    np_image = np.array(image)
+    if classification_text is None:
+        classification_text = tk.Label(window, text="Classifying... ")
+        classification_text.pack()
     else:
-        classification.configure(text = "Classifying... ")
-    window.after(3000, show_prediction, npImage)
+        classification_text.configure(text = "Classifying... ")
+    window.after(3000, show_prediction, np_image)
     
 
     
     
             
-model = load_model(os.path.join('models', 'DogClassification.h5'))
+model = load_model(os.path.join('models', 'DogClassification_text.h5'))
 window = tk.Tk()
 frame = tk.Frame(window)
 frame.pack(side="top")
 window.geometry("260x310")
-window.title("Dog Classifications")
+window.title("Dog Classification_texts")
 button1 = tk.Button(frame, text='Upload image to classify', command=upload_file)
 button1.pack(side="left")
 
 button2 = tk.Button(frame, text='Info/Help', command=show_instructions)
 button2.pack(side="left")
 window.mainloop()
-# image = cv2.imread('test16.jpg')
 """
 resizedImage = tf.image.resize(image, (256,256))
 prediction = model.predict(np.expand_dims(resizedImage/255, 0))
 prediction = prediction.tolist()
-predictionClass = prediction[0].index(max(prediction[0]))
-match predictionClass:
+dog_class_predicted = prediction[0].index(max(prediction[0]))
+match dog_class_predicted:
     case 0:
         print("Your image is of a: Borzoi")
     case 1:
