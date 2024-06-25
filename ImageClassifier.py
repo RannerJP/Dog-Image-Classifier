@@ -10,7 +10,8 @@ class ImageClassifier:
     def __init__(self, model):
         self.model = model
 
-    def get_prediction(self, np_image):
+    def get_prediction(self, image):
+        np_image = np.array(image)
         prediction = self.model.predict(np.expand_dims(np_image/255, 0))
         prediction = prediction.tolist()
         max_prediction_percent = max(prediction[0])
