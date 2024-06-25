@@ -1,16 +1,19 @@
-from keras.models import load_model
 import os
 import tensorflow as tf
+from tensorflow.keras.models import Model
+from keras.models import load_model
 import numpy as np
 import tkinter as tk
-from tkinter import Tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
+from ImageClassifier import ImageClassifier as image_class 
 class DogClassificationUI:
-    def __init__(self, window):
+    def __init__(self, window, model):
         self.window = window
         self.shown_image = None
         self.classification_text = None
+        self.dog_classifier = image_class(model)
+    def show_UI(self):
         frame = tk.Frame(window)
         frame.pack(side="top")
         window.geometry("260x310")
@@ -20,7 +23,7 @@ class DogClassificationUI:
 
         button2 = tk.Button(frame, text='Info/Help', command=self.show_instructions)
         button2.pack(side="left")
-        window.mainloop()
+        self.window.mainloop()
     def show_instructions(self):
         instructions = tk.Toplevel(self.window)
         instructions.title("Information")
@@ -46,11 +49,8 @@ class DogClassificationUI:
         information_body_label = tk.Label(instructions, text=information_body)
         information_body_label.config(wraplength=300)
         information_body_label.pack()
-    def show_prediction(self, np_image):
-        prediction = model.predict(np.expand_dims(np_image/255, 0))
-        prediction = prediction.tolist()
-        max_prediction_percent = max(prediction[0])
-        dog_class_predicted = prediction[0].index(max_prediction_percent)
+    def show_prediction(self, image):
+        dog_class_predicted = self.dog_classifier.get_prediction(image)
         match dog_class_predicted:
             case 0:
                 self.classification_text.configure(text = "Your image is of a: Borzoi")
@@ -79,6 +79,9 @@ class DogClassificationUI:
         filename = filedialog.askopenfilename(filetypes=file_types)
         image = Image.open(filename)
         image = image.resize((256,256))
+        self.show_image(image)
+
+    def show_image(self, image):
         image_view = ImageTk.PhotoImage(image)
         if self.shown_image is None:
             self.shown_image = tk.Label(self.window, image=image_view)
@@ -87,13 +90,12 @@ class DogClassificationUI:
         else:
             self.shown_image.configure(image = image_view)
             self.shown_image.image = image_view
-        np_image = np.array(image)
         if self.classification_text is None:
             self.classification_text = tk.Label(self.window, text="Classifying... ")
             self.classification_text.pack()
         else:
             self.classification_text.configure(text = "Classifying... ")
-        self.window.after(3000, self.show_prediction, np_image)
+        self.window.after(3000, self.show_prediction, image)
         
 
         
@@ -101,7 +103,8 @@ class DogClassificationUI:
 if __name__ == "__main__":
     model = load_model(os.path.join('models', 'DogClassification.h5'))
     window = tk.Tk()
-    user_interface = DogClassificationUI(window)
+    user_interface = DogClassificationUI(window, model)
+    user_interface.show_UI()
     """
     resizedImage = tf.image.resize(image, (256,256))
     prediction = model.predict(np.expand_dims(resizedImage/255, 0))
