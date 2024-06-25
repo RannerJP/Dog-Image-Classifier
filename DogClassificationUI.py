@@ -1,8 +1,4 @@
-import os
-import tensorflow as tf
 from tensorflow.keras.models import Model
-from keras.models import load_model
-import numpy as np
 import tkinter as tk
 from tkinter import Tk, filedialog
 from PIL import Image, ImageTk
@@ -14,10 +10,11 @@ class DogClassificationUI:
         self.classification_text = None
         self.dog_classifier = image_class(model)
     def show_UI(self):
-        frame = tk.Frame(window)
+        # (For Use When an image is made) self.window.iconbitmap('assets/IMAGE_NAME_HERE.ico')
+        frame = tk.Frame(self.window)
         frame.pack(side="top")
-        window.geometry("260x310")
-        window.title("Dog Classification")
+        self.window.geometry("260x310")
+        self.window.title("Dog Classification")
         button1 = tk.Button(frame, text='Upload image to classify', command=self.upload_file)
         button1.pack(side="left")
 
