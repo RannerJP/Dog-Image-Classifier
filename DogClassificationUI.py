@@ -4,11 +4,11 @@ from tensorflow.keras.models import Model
 from keras.models import load_model
 import numpy as np
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import Tk, filedialog
 from PIL import Image, ImageTk
-from ImageClassifier import ImageClassifier as image_class 
+from ImageClassifier import ImageClassifier as image_class
 class DogClassificationUI:
-    def __init__(self, window, model):
+    def __init__(self, window: Tk, model: Model):
         self.window = window
         self.shown_image = None
         self.classification_text = None
@@ -49,7 +49,7 @@ class DogClassificationUI:
         information_body_label = tk.Label(instructions, text=information_body)
         information_body_label.config(wraplength=300)
         information_body_label.pack()
-    def show_prediction(self, image):
+    def show_prediction(self, image: Image):
         dog_class_predicted = self.dog_classifier.get_prediction(image)
         match dog_class_predicted:
             case 0:
@@ -81,7 +81,7 @@ class DogClassificationUI:
         image = image.resize((256,256))
         self.show_image(image)
 
-    def show_image(self, image):
+    def show_image(self, image: Image):
         image_view = ImageTk.PhotoImage(image)
         if self.shown_image is None:
             self.shown_image = tk.Label(self.window, image=image_view)
@@ -101,10 +101,6 @@ class DogClassificationUI:
         
         
 if __name__ == "__main__":
-    model = load_model(os.path.join('models', 'DogClassification.h5'))
-    window = tk.Tk()
-    user_interface = DogClassificationUI(window, model)
-    user_interface.show_UI()
     """
     resizedImage = tf.image.resize(image, (256,256))
     prediction = model.predict(np.expand_dims(resizedImage/255, 0))
