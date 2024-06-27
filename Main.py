@@ -1,6 +1,6 @@
 import os
 from tkinter import Tk
-from DogClassificationUI import DogClassificationUI
+from dog_classification_UI import DogClassificationUI
 from keras.models import load_model
 
 if __name__ == '__main__':
