@@ -4,10 +4,6 @@ from PIL import Image
 class ImageClassifier:
     """
     The ImageClassifier Class handles any predictions made with the model
-
-    Attributes:
-        attribute1 (int): Description of attribute1.
-        attribute2 (str): Description of attribute2.
     """
     def __init__(self, model: Model):
         self.model = model
