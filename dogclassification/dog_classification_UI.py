@@ -2,7 +2,7 @@ from tensorflow.keras.models import Model
 import tkinter as tk
 from tkinter import Tk, filedialog
 from PIL import Image, ImageTk
-from image_classifier import ImageClassifier as image_class
+from dogclassification.image_classifier import ImageClassifier as image_class
 class DogClassificationUI:
     def __init__(self, window: Tk, model: Model):
         self.window = window

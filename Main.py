@@ -1,6 +1,7 @@
 import os
+import sys
 from tkinter import Tk
-from dog_classification_UI import DogClassificationUI
+from dogclassification.dog_classification_UI import DogClassificationUI
 from keras.models import load_model
 
 if __name__ == '__main__':
@@ -8,3 +9,4 @@ if __name__ == '__main__':
     window = Tk()
     user_interface = DogClassificationUI(window, model)
     user_interface.show_UI()
+    print(sys.path)
