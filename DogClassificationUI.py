@@ -92,7 +92,7 @@ class DogClassificationUI:
             self.classification_text.pack()
         else:
             self.classification_text.configure(text = "Classifying... ")
-        self.window.after(3000, self.show_prediction, image)
+        self.window.after(2500, self.show_prediction, image)
         
 
         
