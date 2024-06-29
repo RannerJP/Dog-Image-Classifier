@@ -1,6 +1,7 @@
 import os
 import unittest
 from dogclassification.image_classifier import ImageClassifier
+from dogclassification.image_classifier import IncorrectOutputShapeError
 from PIL import Image
 from keras.models import load_model
 import urllib.request
@@ -29,6 +30,11 @@ class TestImageClassifier(unittest.TestCase):
     def test_invalid_model_set(self):
         with self.assertRaises(TypeError):
             self.classifier.set_model(None)
+    
+    def test_invalid_model_output_shape(self):
+        #TODO
+        with self.assertRaises(IncorrectOutputShapeError):
+            print("To-do") # FIXME
     
     def test_invalid_image_type(self):
         image = os.path.join('assets', 'Invalid_Image.txt')
