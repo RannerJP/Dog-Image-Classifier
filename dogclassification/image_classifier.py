@@ -14,8 +14,8 @@ class ImageClassifier:
     def __init__(self, model: Sequential):
         if not isinstance(model, Sequential):
             raise TypeError("The model should be a Keras Sequential model.")
-        if model.layers[-1].output_shape != 10:
-            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model.layers[-1].output_shape}")
+        if model.layers[-1].units != 10:
+            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model.layers[-1].units}")
         self.model = model
 
     def get_prediction(self, image: Image):
@@ -35,6 +35,6 @@ class ImageClassifier:
     def set_model(self, model_to_set: Model):
         if not isinstance(model_to_set, Sequential):
             raise TypeError("The model should be a Keras Sequential model.")
-        if model_to_set.layers[-1].output_shape != 10:
-            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model_to_set.layers[-1].output_shape}")
+        if model_to_set.layers[-1].units != 10:
+            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model_to_set.layers[-1].units}")
         self.model = model_to_set
