@@ -71,6 +71,8 @@ class DogClassificationUI:
                 self.classification_text.configure(text = "Your image is of a: Poodle")
             case -1:
                 self.classification_text.configure(text = "Your image is not a dog")
+            case -2:
+                self.classification_text.configure(text = "Model was not of type Sequential. Try loading a new model or restart program")
     def upload_file(self):
         file_types = [('Jpg Files', '*jpg'), ('Png files', '*png')]
         filename = filedialog.askopenfilename(filetypes=file_types)
