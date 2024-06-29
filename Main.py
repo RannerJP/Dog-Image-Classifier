@@ -9,4 +9,3 @@ if __name__ == '__main__':
     window = Tk()
     user_interface = DogClassificationUI(window, model)
     user_interface.show_UI()
-    print(sys.path)
