@@ -2,6 +2,11 @@ import numpy as np
 from tensorflow.keras.models import Model
 from keras.models import Sequential
 from PIL import Image
+class IncorrectOutputShapeError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 class ImageClassifier:
     """
     The ImageClassifier Class handles any predictions made with the model
@@ -9,6 +14,8 @@ class ImageClassifier:
     def __init__(self, model: Sequential):
         if not isinstance(model, Sequential):
             raise TypeError("The model should be a Keras Sequential model.")
+        if model.layers[-1].output_shape != 10:
+            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model.layers[-1].output_shape}")
         self.model = model
 
     def get_prediction(self, image: Image):
@@ -28,4 +35,6 @@ class ImageClassifier:
     def set_model(self, model_to_set: Model):
         if not isinstance(model_to_set, Sequential):
             raise TypeError("The model should be a Keras Sequential model.")
+        if model_to_set.layers[-1].output_shape != 10:
+            raise IncorrectOutputShapeError(f"Model has incorrect number of outputs. Expected 10 got {model_to_set.layers[-1].output_shape}")
         self.model = model_to_set
