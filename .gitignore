@@ -4,3 +4,4 @@
 /dogclassification/__pycache__
 /tests/__pycache__
 models/DogClassifcation.h5
+models/test.keras
