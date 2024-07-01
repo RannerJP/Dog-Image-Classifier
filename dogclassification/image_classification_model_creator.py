@@ -48,7 +48,7 @@ for cluster_size in clusters:
                 model.add(Dense(256, activation='relu'))
                 model.add(Dense(10, activation='softmax'))
                 
-                model.compile(loss='categorical_crossentropy', metrics=('accuracy'), optimizer='adam')
+                model.compile(loss='categorical_crossentropy', metrics=[keras.metrics.CategoricalAccuracy()], optimizer='adam')
                 model.fit(training, epochs=steps, validation_data=(validation), batch_size=cluster_size)
                 accuracy = keras.metrics.CategoricalAccuracy()
                 for batch in test.as_numpy_iterator():
@@ -59,4 +59,4 @@ for cluster_size in clusters:
                     best_accuracy = accuracy.result().numpy()
                     best_model = model
                     print(f"best model so far with accuracy: {accuracy.result().numpy()}, with clusters of size: {cluster_size}, convolution layers: {layers}, # of Filters {filters}, # of epochs: {steps}")
-best_model.save(os.path.join('models', 'DogClassification.h5'))
+best_model.save(os.path.join('models', 'DogClassification.keras'))
