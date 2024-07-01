@@ -31,10 +31,24 @@ class TestImageClassifier(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.classifier.set_model(None)
     
-    def test_invalid_model_output_shape(self):
-        #TODO
+    def test_invalid_model_output_shape_init(self):
+        try:
+            invalid_model = load_model(os.path.join('models', 'failModel.h5'))
+        except OSError:
+            file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
+            invalid_model = load_model(file[0])
         with self.assertRaises(IncorrectOutputShapeError):
-            print("To-do") # FIXME
+            classifier = ImageClassifier(invalid_model)
+            
+    def test_invalid_model_output_shape_set(self):
+        try:
+            invalid_model = load_model(os.path.join('models', 'failModel.h5'))
+        except OSError:
+            file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
+            invalid_model = load_model(file[0])
+        with self.assertRaises(IncorrectOutputShapeError):
+            classifier = ImageClassifier(self.valid_model)
+            classifier.set_model(invalid_model)
     
     def test_invalid_image_type(self):
         image = os.path.join('assets', 'Invalid_Image.txt')
