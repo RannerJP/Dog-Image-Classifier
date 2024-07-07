@@ -2,13 +2,26 @@ from tensorflow.keras.models import Model
 import tkinter as tk
 from tkinter import Tk, filedialog
 from PIL import Image, ImageTk
+import urllib3
 from dogclassification.image_classifier import ImageClassifier as image_class
+import os
+from keras.models import load_model
+
 class DogClassificationUI:
     def __init__(self, window: Tk, model: Model):
         self.window = window
         self.shown_image = None
         self.classification_text = None
-        self.dog_classifier = image_class(model)
+        try:
+            self.dog_classifier = image_class(model)
+        except TypeError:
+            print("inital model invalid, setting to default")
+            try:
+                self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
+            except OSError:
+                file = urllib3.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
+                self.valid_model = load_model(file[0])
+
     def show_UI(self):
         # (For Use When an image is made) self.window.iconbitmap('assets/IMAGE_NAME_HERE.ico')
         frame = tk.Frame(self.window)
@@ -80,22 +93,31 @@ class DogClassificationUI:
         image = image.resize((256,256))
         self.show_image(image)
 
-    def show_image(self, image: Image):
-        image_view = ImageTk.PhotoImage(image)
-        if self.shown_image is None:
-            self.shown_image = tk.Label(self.window, image=image_view)
-            self.shown_image.image = image_view
-            self.shown_image.pack()
-        else:
-            self.shown_image.configure(image = image_view)
-            self.shown_image.image = image_view
+    def set_classification_text(self, image: Image):
+        valid_image = True
+        if not isinstance(image, Image.Image):
+            valid_image = False
         if self.classification_text is None:
-            self.classification_text = tk.Label(self.window, text="Classifying... ")
+            self.classification_text = tk.Label(self.window, text="Classifying... ") if valid_image else tk.Label(self.window, text="Sorry, that image type is invalid!") 
             self.classification_text.pack()
         else:
-            self.classification_text.configure(text = "Classifying... ")
-        self.window.after(2500, self.show_prediction, image)
-        
+            self.classification_text.configure(text = "Classifying... ") if valid_image else self.classification_text.configure(text = "Sorry, that image type is invalid!")
+        return valid_image
+    
+    def show_image(self, image: Image):
+        if isinstance(image, Image.Image):
+            image_view = ImageTk.PhotoImage(image)
+            if self.shown_image is None:
+                self.shown_image = tk.Label(self.window, image=image_view)
+                self.shown_image.image = image_view
+                self.shown_image.pack()
+            else:
+                self.shown_image.configure(image = image_view)
+                self.shown_image.image = image_view
+            self.set_classification_text(image)
+            self.window.after(2500, self.show_prediction, image)
+        else:
+            self.set_classification_text(image)
 
         
         
