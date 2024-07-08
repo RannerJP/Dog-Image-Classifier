@@ -28,11 +28,13 @@ class DogClassificationUI:
         frame.pack(side="top")
         self.window.geometry("260x310")
         self.window.title("Dog Classification")
-        button1 = tk.Button(frame, text='Upload image to classify', command=self.upload_file)
-        button1.pack(side="left")
+        #upload_model_button = tk.Button(frame, text="Upload Model", command=self.upload_model)
+        #upload_model_button.pack(side="left")
+        upload_image_button = tk.Button(frame, text='Upload image to classify', command=self.upload_file)
+        upload_image_button.pack(side="left")
 
-        button2 = tk.Button(frame, text='Info/Help', command=self.show_instructions)
-        button2.pack(side="left")
+        show_instructions_button = tk.Button(frame, text='Info/Help', command=self.show_instructions)
+        show_instructions_button.pack(side="left")
         self.window.mainloop()
     def show_instructions(self):
         instructions = tk.Toplevel(self.window)
