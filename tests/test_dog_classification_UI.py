@@ -13,12 +13,12 @@ class TestDogClassificationUI(unittest.TestCase):
     def setUp(self) -> None:
         try:
             self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
-            self.invalid_model = load_model(os.path.join('models', 'failModel.h5'))
+            self.fail_model = load_model(os.path.join('models', 'failModel.h5'))
         except OSError:
             file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
-            fail_model = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
+            fail = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
             self.valid_model = load_model(file[0])
-            self.invalid_model = load_model(fail_model[0])
+            self.fail_model = load_model(fail[0])
         self.UI = DogClassificationUI(Tk(), self.valid_model)
     
     def tearDown(self) -> None:
