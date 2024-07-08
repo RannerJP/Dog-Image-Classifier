@@ -2,7 +2,6 @@ import os
 from tkinter import Tk
 import unittest
 from dogclassification.dog_classification_UI import DogClassificationUI
-from dogclassification.image_classifier import ImageClassifier as image_class
 import urllib.request
 from keras.models import load_model
 from PIL import Image
@@ -14,11 +13,12 @@ class TestDogClassificationUI(unittest.TestCase):
     def setUp(self) -> None:
         try:
             self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
+            self.invalid_model = load_model(os.path.join('models', 'failModel.h5'))
         except OSError:
             file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
-            file2 = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
+            fail_model = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
             self.valid_model = load_model(file[0])
-            self.invalid_model = load_model(file2[0])
+            self.invalid_model = load_model(fail_model[0])
         self.UI = DogClassificationUI(Tk(), self.valid_model)
     
     def tearDown(self) -> None:
