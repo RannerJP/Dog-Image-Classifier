@@ -9,12 +9,12 @@ import urllib.request
 
 class TestImageClassifier(unittest.TestCase):
     def setUp(self):    
-            try:
-                self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
-            except OSError:
-                file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
-                self.valid_model = load_model(file[0])
-            self.classifier = ImageClassifier(self.valid_model)
+        try:
+            self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
+        except OSError:
+            file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
+            self.valid_model = load_model(file[0])
+        self.classifier = ImageClassifier(self.valid_model)
     
     def test_valid_model_and_image(self):
         self.classifier.set_model(self.valid_model)
