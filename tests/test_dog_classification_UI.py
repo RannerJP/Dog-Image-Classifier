@@ -13,12 +13,9 @@ class TestDogClassificationUI(unittest.TestCase):
     def setUp(self) -> None:
         try:
             self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
-            #self.fail_model = load_model(os.path.join('models', 'failModel.h5'))
         except OSError:
             file = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
-            #fail = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
             self.valid_model = load_model(file[0])
-            #self.fail_model = load_model(fail[0])
         self.UI = DogClassificationUI(Tk(), self.valid_model)
     
     def tearDown(self) -> None:
@@ -41,3 +38,17 @@ class TestDogClassificationUI(unittest.TestCase):
             self.UI.window.update()
         classification_type = self.UI.classification_text.cget("text")
         self.assertTrue(classification_type.startswith("Your image is of a:"))
+    def test_incorrect_model_load(self):
+        try:
+            fail_model = load_model(os.path.join('models', 'failModel.h5'))
+        except:
+            fail = urllib.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/failModel.h5?download=", ".h5")
+            fail_model = load_model(fail[0])
+        self.UI.set_model(fail_model)
+        start_time = time.time()
+        while time.time() - start_time < 3:
+            self.UI.window.update_idletasks()
+            self.UI.window.update()
+        classification_type = self.UI.classification_text.cget("text")
+        self.assertTrue(classification_type.startswith("Model has incorrect number of outputs. Expected 10 got"))
+
