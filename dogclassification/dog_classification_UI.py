@@ -128,13 +128,18 @@ class DogClassificationUI:
             self.window.after(2500, self.show_prediction, image)
         else:
             self.set_classification_text(image)
+    
     def upload_model(self) -> None:
         file_types = [('Keras Files', '*keras'), ('H5 files', '*h5')]
         model_file = filedialog.askopenfilename(filetypes=file_types)
         model = load_model(model_file)
+        self.set_model(model)
+    def set_model(self, model: Sequential) -> None:
         try:
             self.dog_classifier.set_model(model)
         except IncorrectOutputShapeError as error:
+            self.set_classification_text(None, error)
+        except TypeError:
             self.set_classification_text(None, error)
 
 
