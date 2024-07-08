@@ -7,8 +7,14 @@ import urllib.request
 from keras.models import load_model
 from PIL import Image
 import time
+
 class TestDogClassificationUI(unittest.TestCase):
+
+    
     def setUp(self) -> None:
+        if os.environ.get('DISPLAY','') == '':
+            print('no display found. Using :0.0')
+            os.environ.__setitem__('DISPLAY', ':0.0')
         try:
             self.valid_model = load_model(os.path.join('models', 'DogClassification.h5'))
         except OSError:
