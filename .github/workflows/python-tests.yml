@@ -22,4 +22,6 @@ jobs:
 
       - name: Run tests
         run: |
+          export DISPLAY=:99
+          Xvfb :99 &
           python -m unittest discover -s tests
