@@ -5,8 +5,9 @@ from PIL import Image, ImageTk
 import urllib3
 from dogclassification.image_classifier import ImageClassifier as image_class
 import os
+from keras.models import Sequential
 from keras.models import load_model
-
+from dogclassification.image_classifier import IncorrectOutputShapeError
 class DogClassificationUI:
     def __init__(self, window: Tk, model: Model):
         self.window = window
@@ -28,8 +29,8 @@ class DogClassificationUI:
         frame.pack(side="top")
         self.window.geometry("260x310")
         self.window.title("Dog Classification")
-        #upload_model_button = tk.Button(frame, text="Upload Model", command=self.upload_model)
-        #upload_model_button.pack(side="left")
+        upload_model_button = tk.Button(frame, text="Upload Model", command=self.upload_model)
+        upload_model_button.pack(side="left")
         upload_image_button = tk.Button(frame, text='Upload image to classify', command=self.upload_file)
         upload_image_button.pack(side="left")
 
@@ -95,15 +96,22 @@ class DogClassificationUI:
         image = image.resize((256,256))
         self.show_image(image)
 
-    def set_classification_text(self, image: Image):
+    def set_classification_text(self, image: Image, message = None):
         valid_image = True
         if not isinstance(image, Image.Image):
             valid_image = False
         if self.classification_text is None:
-            self.classification_text = tk.Label(self.window, text="Classifying... ") if valid_image else tk.Label(self.window, text="Sorry, that image type is invalid!") 
-            self.classification_text.pack()
+            if message:
+                self.classification_text = tk.Label(self.window, text=message) 
+                self.classification_text.pack()
+            else:
+                self.classification_text = tk.Label(self.window, text="Classifying... ") if valid_image else tk.Label(self.window, text="Sorry, that image type is invalid!") 
+                self.classification_text.pack()
         else:
-            self.classification_text.configure(text = "Classifying... ") if valid_image else self.classification_text.configure(text = "Sorry, that image type is invalid!")
+            if message:
+                self.classification_text.configure(text = message)
+            else:
+                self.classification_text.configure(text = "Classifying... ") if valid_image else self.classification_text.configure(text = "Sorry, that image type is invalid!")
         return valid_image
     
     def show_image(self, image: Image):
@@ -120,6 +128,15 @@ class DogClassificationUI:
             self.window.after(2500, self.show_prediction, image)
         else:
             self.set_classification_text(image)
+    def upload_model(self) -> None:
+        file_types = [('Keras Files', '*keras'), ('H5 files', '*h5')]
+        model_file = filedialog.askopenfilename(filetypes=file_types)
+        model = load_model(model_file)
+        try:
+            self.dog_classifier.set_model(model)
+        except IncorrectOutputShapeError as error:
+            self.set_classification_text(None, error)
+
 
         
         
