@@ -22,20 +22,20 @@ class DogClassificationUI:
             except OSError:
                 file = urllib3.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
                 self.valid_model = load_model(file[0])
-
+    
     def show_UI(self):
         # (For Use When an image is made) self.window.iconbitmap('assets/IMAGE_NAME_HERE.ico')
         frame = tk.Frame(self.window)
-        frame.pack(side="top")
-        self.window.geometry("260x310")
+        frame.pack(side="top", fill='both')
+        self.window.geometry("300x400")
         self.window.title("Dog Classification")
-        upload_model_button = tk.Button(frame, text="Upload Model", command=self.upload_model)
-        upload_model_button.pack(side="left")
-        upload_image_button = tk.Button(frame, text='Upload image to classify', command=self.upload_file)
-        upload_image_button.pack(side="left")
+        upload_model_button = tk.Button(frame, text="Upload Model", command=self.upload_model, bg='grey72')
+        upload_model_button.pack(side="left", expand=True, fill='both')
+        upload_image_button = tk.Button(frame, text='Upload image to classify', command=self.upload_file, bg='ivory2')
+        upload_image_button.pack(side="left", expand=True, fill='both')
 
-        show_instructions_button = tk.Button(frame, text='Info/Help', command=self.show_instructions)
-        show_instructions_button.pack(side="left")
+        show_instructions_button = tk.Button(frame, text='Info/Help', command=self.show_instructions, bg='grey72')
+        show_instructions_button.pack(side="left",expand=True, fill='both')
         self.window.mainloop()
     def show_instructions(self):
         instructions = tk.Toplevel(self.window)
@@ -93,7 +93,7 @@ class DogClassificationUI:
         file_types = [('Jpg Files', '*jpg'), ('Png files', '*png')]
         filename = filedialog.askopenfilename(filetypes=file_types)
         image = Image.open(filename)
-        image = image.resize((256,256))
+        image = image.resize((256,256), Image.Resampling.LANCZOS)
         self.show_image(image)
 
     def set_classification_text(self, image: Image, message = None):
@@ -120,7 +120,7 @@ class DogClassificationUI:
             if self.shown_image is None:
                 self.shown_image = tk.Label(self.window, image=image_view)
                 self.shown_image.image = image_view
-                self.shown_image.pack()
+                self.shown_image.pack(expand=True, fill='both')
             else:
                 self.shown_image.configure(image = image_view)
                 self.shown_image.image = image_view
