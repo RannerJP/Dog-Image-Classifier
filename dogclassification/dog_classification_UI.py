@@ -23,7 +23,6 @@ class DogClassificationUI:
                 file = urllib3.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
                 self.valid_model = load_model(file[0])
     def on_resize(self, event):
-        print("Window resized")
         if self.shown_image and self.shown_image.image:
             width = self.shown_image.winfo_width()
             length = self.shown_image.winfo_height()
