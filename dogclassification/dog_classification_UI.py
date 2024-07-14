@@ -22,7 +22,16 @@ class DogClassificationUI:
             except OSError:
                 file = urllib3.request.urlretrieve("https://github.com/RannerJP/Dog-Image-Classifier/raw/main/models/DogClassification.h5?download=", ".h5")
                 self.valid_model = load_model(file[0])
-    
+    def on_resize(self, event):
+        print("Window resized")
+        if self.shown_image and self.shown_image.image:
+            width = self.shown_image.winfo_width()
+            length = self.shown_image.winfo_height()
+            image = ImageTk.getimage(self.shown_image.image)
+            image = image.resize((width , length-5) , Image.Resampling.LANCZOS)
+            image_view = ImageTk.PhotoImage(image)
+            self.shown_image.configure(image = image_view)
+            self.shown_image.image = image_view
     def show_UI(self):
         # (For Use When an image is made) self.window.iconbitmap('assets/IMAGE_NAME_HERE.ico')
         frame = tk.Frame(self.window)
@@ -36,6 +45,7 @@ class DogClassificationUI:
 
         show_instructions_button = tk.Button(frame, text='Info/Help', command=self.show_instructions, bg='grey72')
         show_instructions_button.pack(side="left",expand=True, fill='both')
+        self.window.bind("<Configure>", self.on_resize)
         self.window.mainloop()
     def show_instructions(self):
         instructions = tk.Toplevel(self.window)
@@ -103,10 +113,10 @@ class DogClassificationUI:
         if self.classification_text is None:
             if message:
                 self.classification_text = tk.Label(self.window, text=message) 
-                self.classification_text.pack()
+                self.classification_text.pack(expand=True, fill='both')
             else:
                 self.classification_text = tk.Label(self.window, text="Classifying... ") if valid_image else tk.Label(self.window, text="Sorry, that image type is invalid!") 
-                self.classification_text.pack()
+                self.classification_text.pack(expand=True, fill='both')
         else:
             if message:
                 self.classification_text.configure(text = message)
@@ -141,7 +151,6 @@ class DogClassificationUI:
             self.set_classification_text(None, error)
         except TypeError:
             self.set_classification_text(None, error)
-
 
         
         
