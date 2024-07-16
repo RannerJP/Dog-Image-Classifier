@@ -1,5 +1,6 @@
 # Dog Image Classifer
 ![image](./assets/application.png)
+
 [Chihuahua Image Source](https://www.pickpik.com/long-haired-chihuahua-puppy-sweet-little-dog-tiny-70765)
 
 This is a python project for classifying 10 different dog breeds.
