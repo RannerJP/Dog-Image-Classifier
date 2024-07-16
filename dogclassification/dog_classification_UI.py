@@ -51,8 +51,8 @@ class DogClassificationUI:
         instructions.title("Information")
         instructions_header = "Welcome to the Dog Classifcation program!\n Instructions:"
         instructions_body = "To use this program, Press the \"Upload image to classify\" button."\
-                            " Your image gets reformatted to 256x256 in order to make the"\
-                            " program to stay a uniform size and since the model accepts image input of 256 x 256"
+                            " Your image gets resized as the window changes size"\
+                            "You can also set your own model using the \"Upload model\" button. Make sure the model is a Sequential type and that the model has 10 output parameters"
         information_header = "Information About the Program:"
         information_body = "This program was trained on a CNN with 2 Conv2D layers and a dense layer. Relu activtion was used for the inbetween layers"\
                             " with softmax being used for the final output layer. Each image had at least 150 images in the database, 70% was for training, 20%"\
